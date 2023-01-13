@@ -16,7 +16,7 @@ public class JokeTypeService {
         this.jokeTypesRepo = jokeTypesRepo;
     }
 
-    public Object GetAllJokeType() throws Exception{
+    public ArrayList<JokeType> GetAllJokeType() throws Exception{
         try{
             var jokeTypes = jokeTypesRepo.findAll();
 
