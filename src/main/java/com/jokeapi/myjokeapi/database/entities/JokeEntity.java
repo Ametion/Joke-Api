@@ -22,4 +22,36 @@ public class JokeEntity {
             joinColumns = @JoinColumn(name = "joke_id"),
             inverseJoinColumns = @JoinColumn(name = "joke_type_id"))
     private Set<JokeTypeEntity> jokeTypes;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LanguageEntity getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(LanguageEntity language) {
+        this.language = language;
+    }
+
+    public Set<JokeTypeEntity> getJokeTypes() {
+        return jokeTypes;
+    }
+
+    public void setJokeTypes(Set<JokeTypeEntity> jokeTypes) {
+        this.jokeTypes = jokeTypes;
+    }
 }

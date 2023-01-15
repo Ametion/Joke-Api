@@ -1,7 +1,6 @@
 package com.jokeapi.myjokeapi.database.entities;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
