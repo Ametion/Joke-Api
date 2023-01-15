@@ -1,9 +1,11 @@
 package com.jokeapi.myjokeapi.joke;
 
 import com.jokeapi.myjokeapi.database.entities.JokeEntity;
+import com.jokeapi.myjokeapi.database.entities.JokeTypeEntity;
 import com.jokeapi.myjokeapi.database.repositories.JokeTypesRepo;
 import com.jokeapi.myjokeapi.database.repositories.JokesRepo;
 import com.jokeapi.myjokeapi.database.repositories.LanguageRepo;
+import com.jokeapi.myjokeapi.joke.request.AddJokeRequest;
 import com.jokeapi.myjokeapi.joke.request.GetJokeRequest;
 import com.jokeapi.myjokeapi.joke.responses.Joke;
 import com.jokeapi.myjokeapi.jokeTypes.responses.JokeType;
@@ -59,6 +61,22 @@ public class JokeService {
             return new Joke(jokeList.get(jokeId).getId(), jokeList.get(jokeId).getContent(),
                     new Language(jokeList.get(jokeId).getLanguage().getId(), jokeList.get(jokeId).getLanguage().getLanguage()),
                     typesList);
+        }catch(Exception e){
+            throw new Exception(e);
+        }
+    }
+
+    public Boolean AddJoke(AddJokeRequest addJokeRequest) throws Exception {
+        try{
+            var jokeTypes = jokeTypesRepo.findByIdIn(addJokeRequest.jokeTypes);
+
+            var language = languageRepo.findById(addJokeRequest.languageId).get();
+
+            var joke = new JokeEntity(addJokeRequest.joke, language, jokeTypes);
+
+            jokesRepo.save(joke);
+
+            return true;
         }catch(Exception e){
             throw new Exception(e);
         }
