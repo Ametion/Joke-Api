@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/joke")
+@RequestMapping
 public class JokeController {
     private final JokeService jokeService;
 
@@ -16,7 +16,7 @@ public class JokeController {
         this.jokeService = jokeService;
     }
 
-    @GetMapping
+    @PostMapping("/joke")
     public ResponseEntity GetJoke(@RequestBody GetJokeRequest getJokeRequest){
         try{
             return ResponseEntity.ok(jokeService.GetJoke(getJokeRequest));
@@ -25,7 +25,7 @@ public class JokeController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/addJoke")
     public ResponseEntity AddJoke(@RequestBody AddJokeRequest addJokeRequest){
         try{
             return ResponseEntity.ok(jokeService.AddJoke(addJokeRequest));
