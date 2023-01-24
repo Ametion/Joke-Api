@@ -6,7 +6,10 @@ import com.jokeapi.myjokeapi.database.entities.LanguageEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 public interface JokesRepo extends CrudRepository<JokeEntity, Long> {
+    List<JokeEntity> findByLanguageAndJokeTypesIn(LanguageEntity language, Collection<JokeTypeEntity> jokeTypes);
+
+    List<JokeEntity> findByLanguage(LanguageEntity language);
 }
