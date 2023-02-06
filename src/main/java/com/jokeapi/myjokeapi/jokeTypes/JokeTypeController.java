@@ -1,11 +1,11 @@
 package com.jokeapi.myjokeapi.jokeTypes;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping()
 public class JokeTypeController {
     private final JokeTypeService jokeTypeService;
 
@@ -15,12 +15,11 @@ public class JokeTypeController {
     }
 
     @GetMapping("/jokeTypes")
-    @ResponseBody
     public ResponseEntity GetJokeTypeById() {
         try{
-            return ResponseEntity.ok(jokeTypeService.GetAllJokeType());
-        }catch(Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseEntity(jokeTypeService.GetAllJokeType(), HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

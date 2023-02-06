@@ -1,5 +1,6 @@
 package com.jokeapi.myjokeapi.languages;
 
+import com.jokeapi.myjokeapi.database.entities.LanguageEntity;
 import com.jokeapi.myjokeapi.database.repositories.LanguageRepo;
 import com.jokeapi.myjokeapi.languages.responses.Language;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +22,15 @@ public class LanguageService {
         try{
             var languages = languageRepo.findAll();
 
-            var list = new ArrayList<Language>();
+            List<Language> list = new ArrayList<>();
 
-            for(var lan: languages){
+            for(LanguageEntity lan: languages){
                 list.add(new Language(lan.getId(), lan.getLanguage()));
             }
 
             return list;
-        }catch(Exception e){
-            throw new Exception(e);
+        }catch(Exception ex){
+            throw new Exception(ex);
         }
     }
 }

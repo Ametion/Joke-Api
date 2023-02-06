@@ -15,12 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class JokeService {
-    private JokesRepo jokesRepo;
-    private JokeTypesRepo jokeTypesRepo;
-    private LanguageRepo languageRepo;
+    private final JokesRepo jokesRepo;
+    private final JokeTypesRepo jokeTypesRepo;
+    private final LanguageRepo languageRepo;
 
     @Autowired
     public JokeService(JokesRepo jokesRepo, JokeTypesRepo jokeTypesRepo, LanguageRepo languageRepo) {
@@ -31,36 +33,36 @@ public class JokeService {
 
     public Joke GetJoke(GetJokeRequest getJokeRequest) throws Exception {
         try{
-            var jokeTypes = jokeTypesRepo.findByIdIn(getJokeRequest.jokeTypes);
-            var language = languageRepo.findById(getJokeRequest.language).get();
+            Set<JokeTypeEntity> jokeTypes = jokeTypesRepo.findByIdIn(getJokeRequest.jokeTypes);
+            LanguageEntity language = languageRepo.findById(getJokeRequest.language).get();
 
-            var jokes = jokesRepo.findByLanguageAndJokeTypesIn(language, jokeTypes);
+            List<JokeEntity> jokes = jokesRepo.findByLanguageAndJokeTypesIn(language, jokeTypes);
 
             if (jokes.isEmpty()) {
                 jokes = jokesRepo.findByLanguage(language);
             }
 
             int jokeId = (int) Math.floor(Math.random() * jokes.size());
-            var selectedJoke = jokes.get(jokeId);
+            JokeEntity selectedJoke = jokes.get(jokeId);
 
-            var typesList = new ArrayList<JokeType>();
+            List<JokeType> typesList = new ArrayList<>();
             selectedJoke.getJokeTypes().forEach(jt -> typesList.add(new JokeType(jt.getId(), jt.getJokeType())));
 
             return new Joke(selectedJoke.getId(), selectedJoke.getContent(),
                     new Language(selectedJoke.getLanguage().getId(), selectedJoke.getLanguage().getLanguage()),
                     typesList);
-        }catch(Exception e){
-            throw new Exception(e);
+        }catch(Exception ex){
+            throw new Exception(ex);
         }
     }
 
     public Boolean AddJoke(AddJokeRequest addJokeRequest) throws Exception {
         try{
-            var jokeTypes = jokeTypesRepo.findByIdIn(addJokeRequest.jokeTypes);
+            Set<JokeTypeEntity> jokeTypes = jokeTypesRepo.findByIdIn(addJokeRequest.jokeTypes);
 
-            var language = languageRepo.findById(addJokeRequest.languageId).get();
+            LanguageEntity language = languageRepo.findById(addJokeRequest.languageId).get();
 
-            var joke = new JokeEntity(addJokeRequest.joke, language, jokeTypes);
+            JokeEntity joke = new JokeEntity(addJokeRequest.joke, language, jokeTypes);
 
             jokesRepo.save(joke);
 
