@@ -29,8 +29,8 @@ public class JokeTypeService {
             }
 
             return list;
-        }catch(Exception e){
-            throw new Exception(e);
+        }catch(Exception ex){
+            throw new Exception(ex);
         }
     }
 }

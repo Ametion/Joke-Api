@@ -6,16 +6,19 @@ import com.jokeapi.myjokeapi.database.entities.LanguageEntity;
 import com.jokeapi.myjokeapi.database.repositories.JokeTypesRepo;
 import com.jokeapi.myjokeapi.database.repositories.JokesRepo;
 import com.jokeapi.myjokeapi.database.repositories.LanguageRepo;
+import com.jokeapi.myjokeapi.joke.exceptions.NoJokeFoundException;
 import com.jokeapi.myjokeapi.joke.request.AddJokeRequest;
 import com.jokeapi.myjokeapi.joke.request.GetJokeRequest;
 import com.jokeapi.myjokeapi.joke.responses.Joke;
 import com.jokeapi.myjokeapi.jokeTypes.responses.JokeType;
+import com.jokeapi.myjokeapi.languages.exceptions.NoLanguageFoundException;
 import com.jokeapi.myjokeapi.languages.responses.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
@@ -31,7 +34,7 @@ public class JokeService {
         this.languageRepo = languageRepo;
     }
 
-    public Joke GetJoke(GetJokeRequest getJokeRequest) throws Exception {
+    public Joke GetJoke(GetJokeRequest getJokeRequest) throws Exception, NoLanguageFoundException, NoJokeFoundException {
         try{
             Set<JokeTypeEntity> jokeTypes = jokeTypesRepo.findByIdIn(getJokeRequest.jokeTypes);
             LanguageEntity language = languageRepo.findById(getJokeRequest.language).get();
@@ -42,6 +45,10 @@ public class JokeService {
                 jokes = jokesRepo.findByLanguage(language);
             }
 
+            if(jokes.isEmpty()){
+                throw new NoJokeFoundException("Cam not find jokes with presented parameters");
+            }
+
             int jokeId = (int) Math.floor(Math.random() * jokes.size());
             JokeEntity selectedJoke = jokes.get(jokeId);
 
@@ -49,14 +56,15 @@ public class JokeService {
             selectedJoke.getJokeTypes().forEach(jt -> typesList.add(new JokeType(jt.getId(), jt.getJokeType())));
 
             return new Joke(selectedJoke.getId(), selectedJoke.getContent(),
-                    new Language(selectedJoke.getLanguage().getId(), selectedJoke.getLanguage().getLanguage()),
-                    typesList);
-        }catch(Exception ex){
+                    new Language(selectedJoke.getLanguage().getId(), selectedJoke.getLanguage().getLanguage()), typesList);
+        }catch(NoSuchElementException noLanguage) {
+            throw new NoLanguageFoundException("Can not find any languages by presented id: " + getJokeRequest.language, getJokeRequest.language);
+        }catch (Exception ex){
             throw new Exception(ex);
         }
     }
 
-    public Boolean AddJoke(AddJokeRequest addJokeRequest) throws Exception {
+    public Boolean AddJoke(AddJokeRequest addJokeRequest) throws Exception, NoLanguageFoundException {
         try{
             Set<JokeTypeEntity> jokeTypes = jokeTypesRepo.findByIdIn(addJokeRequest.jokeTypes);
 
@@ -67,8 +75,10 @@ public class JokeService {
             jokesRepo.save(joke);
 
             return true;
-        }catch(Exception e){
-            throw new Exception(e);
+        }catch(NoSuchElementException noLanguage) {
+            throw new NoLanguageFoundException("Can not find any languages by presented id: " + addJokeRequest.languageId, addJokeRequest.languageId);
+        }catch(Exception ex){
+            throw new Exception(ex);
         }
     }
 }
