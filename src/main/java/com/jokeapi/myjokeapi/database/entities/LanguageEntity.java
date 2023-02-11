@@ -12,30 +12,38 @@ public class LanguageEntity {
 
     private String language;
 
+    private String abbreviation;
+
     @OneToMany(mappedBy = "language")
     private List<JokeEntity> joke;
 
-    public Long getId() {
-        return id;
+    public LanguageEntity(){ }
+
+    public LanguageEntity(String language, String abbreviation) {
+        this.language = language;
+        this.abbreviation = abbreviation;
     }
 
-    public void setId(Long id) {
+    public LanguageEntity(Long id, String language, String abbreviation, List<JokeEntity> joke) {
         this.id = id;
+        this.language = language;
+        this.abbreviation = abbreviation;
+        this.joke = joke;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public String getAbbreviation() {
+        return abbreviation;
     }
 
     public List<JokeEntity> getJoke() {
         return joke;
-    }
-
-    public void setJoke(List<JokeEntity> joke) {
-        this.joke = joke;
     }
 }

@@ -4,4 +4,5 @@ import com.jokeapi.myjokeapi.database.entities.LanguageEntity;
 import org.springframework.data.repository.CrudRepository;
 
 public interface LanguageRepo extends CrudRepository<LanguageEntity, Long> {
+    LanguageEntity findByAbbreviation(String abbreviation);
 }

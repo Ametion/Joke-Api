@@ -56,7 +56,7 @@ public class JokeService {
             selectedJoke.getJokeTypes().forEach(jt -> typesList.add(new JokeType(jt.getId(), jt.getJokeType())));
 
             return new Joke(selectedJoke.getId(), selectedJoke.getContent(),
-                    new Language(selectedJoke.getLanguage().getId(), selectedJoke.getLanguage().getLanguage()), typesList);
+                    new Language(selectedJoke.getLanguage().getId(), selectedJoke.getLanguage().getAbbreviation(), selectedJoke.getLanguage().getLanguage()), typesList);
         }catch(NoSuchElementException noLanguage) {
             throw new NoLanguageFoundException("Can not find any languages by presented id: " + getJokeRequest.language, getJokeRequest.language);
         }catch (Exception ex){
