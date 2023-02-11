@@ -17,27 +17,29 @@ public class JokeTypeEntity {
     @ManyToMany(mappedBy = "jokeTypes")
     private Set<JokeEntity> jokes;
 
+    public JokeTypeEntity() { }
+
+    public JokeTypeEntity(String jokeType) {
+        this.jokeType = jokeType;
+    }
+
+    public JokeTypeEntity(Long id, String jokeType, Set<JokeEntity> jokes) {
+        this.id = id;
+        this.jokeType = jokeType;
+        this.jokes = jokes;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getJokeType() {
         return jokeType;
     }
 
-    public void setJokeType(String jokeType) {
-        this.jokeType = jokeType;
-    }
 
     public Set<JokeEntity> getJokes() {
         return jokes;
-    }
-
-    public void setJokes(Set<JokeEntity> jokes) {
-        this.jokes = jokes;
     }
 }

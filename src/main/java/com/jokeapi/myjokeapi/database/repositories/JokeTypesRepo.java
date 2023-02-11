@@ -8,4 +8,5 @@ import java.util.Set;
 
 public interface JokeTypesRepo extends CrudRepository<JokeTypeEntity, Long> {
     Set<JokeTypeEntity> findByIdIn(Collection<Long> id);
+    JokeTypeEntity findByJokeType(String jokeType);
 }
